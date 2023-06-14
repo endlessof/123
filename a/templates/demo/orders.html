@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Страница заказы</h1>
+    {% if order_list %}
+        <ol>
+            {% for order in order_list %}
+                {% if order.status == 'canceled' %}
+                    <li style=" color: #999999">
+                {% endif %}
+                {% if order.status == 'confirmed' %}
+                    <li style="color: #34ce57">
+                {% endif %}
+
+                {% if order.status == 'new' %}
+                    <li>
+                {% endif %}
+                    {{ order.date }} ({{ order.status_verbose }})
+                    {% if order.iteminorder_set.all %}
+                        {% if order.status == 'new' %}
+                            <a href="{% url 'delete_order' order.pk %}">Удалить заказ</a>
+                        {% endif %}
+                        <ul>
+                            {% for item in order.iteminorder_set.all %}
+                                <li>
+                                    <img src="{{ item.product.photo_file.url }}" style="width: 50px">
+                                    {{ item.product.name }} | Количество: {{ item.count }} | Стоимость: {{ item.price }}
+                                </li>
+                            {% endfor %}
+
+
+                        </ul>
+                    {% endif %}
+                </li>
+                <hr>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>У вас пока нет заказов</p>
+    {% endif %}
+
+{% endblock %}

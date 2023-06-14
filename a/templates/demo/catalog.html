@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Страница с каталогом</h1>
+
+    <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
+        <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+
+            {% for product in products %}
+
+                <div class="col-3 p-2">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{{ product.photo_file.url }}"
+                             class="card-img-top" alt="..." style="width: 150px; height: 100px">
+                        <div class="card-body">
+                            <div class="clearfix mb-3"><span
+                                    class="float-start badge rounded-pill bg-primary">{{ product.category }}</span>
+                                <span class="float-end price-hp">{{ product.price }} руб.</span></div>
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p>Осталось: {{ product.count }}</p>
+                            {% if user.is_authenticated %}
+                                <div class="text-center my-4">
+                                    <a href="{% url 'catalog' %}" class="btn btn-warning"
+                                       onclick="toCart(this,{{ product.pk }})">
+                                        Добавить в корзину
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+
+    <script>
+        toCart = async (target, pk) => {
+            console.log(target);
+            const res = await fetch(`/to_cart/${pk}`).then(res => res.json());
+            const message = document.createElement('div');
+            if (res.count) {
+                message.innerHTML = 'Товар добавлен в корзину. Общее кол-во товаров в корзине: ' + res.count;
+            } else {
+                message.innerHTML = 'Нельзя больше добавить';
+            }
+            document.querySelector('.starter-template').prepend(message);
+            setTimeout(() => message.remove(), 1000);
+        }
+    </script>
+{% endblock %}
