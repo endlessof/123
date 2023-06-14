@@ -1,1 +1,15 @@
-кто прочитал то сдохнет
+Django	
+Pillow	
+asgiref	
+distlib	
+filelock	
+pip	
+platformdirs	
+setuptools	
+six	
+sqlparse	
+typing-extensions	
+tzdata	
+virtualenv	
+virtualenvwrapper-win	
+wheel	
